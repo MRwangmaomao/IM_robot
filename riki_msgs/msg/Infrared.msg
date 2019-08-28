@@ -1,0 +1,3 @@
+bool front
+bool rear
+
