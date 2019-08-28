@@ -2,8 +2,9 @@
 
 This robot is combine car with arm.
 
-![IM-robot](开发笔记/img/IM-Robot.png)
+![IM-robot](doc/img/IM-Robot.png)
 
+![grasp](doc/img/grasp_QR.gif)
 ## 1 car Simulation
 
 ### 1.1 navigation
@@ -44,22 +45,10 @@ In "Motion Planning" -> "Plan and Execute" to send trajectory to the sim robot
 Exit RViz and Ctrl-C the demo.launch window
 
 
-# 4 bringup.launch
+## 4 bringup.launch
 ```
 roslaunch thurobot bringup.launch
 ```
-
-### 4.1 arduino_serial_node  
-
-src/rosserial/rosserial_arduino/nodes/serial_node.py
-
-1. 设置串口属性，波特率
-2. 进入循环，执行SerialClient任务，接收并转发单片机发送的数据
-
-### 4.2 apply_calib
-
-src/imu_calib/src/accl_calib/apply_calib_node.cpp 
-                           --apply_calib.cpp
 
 
 ## 4 remote move by keyboard
