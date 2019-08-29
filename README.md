@@ -13,6 +13,7 @@ This robot is combine car with arm.
 ![IM-robot](doc/img/IM-Robot.png)
 ![IM-robot](doc/img/model_robot.png)
 ![IM-robot](doc/img/rviz_robot_calib.png)   
+![slam](doc/img/slam.gif)
 ![grasp](doc/img/grasp_QR.gif)
 
 ## 1 car Simulation
