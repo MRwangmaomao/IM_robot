@@ -10,7 +10,7 @@ This robot is combine car with arm.
 
 -----------------------------------
 
-![IM-robot](doc/img/IM-Robot_mini.png)
+![IM-robot](doc/img/IM-Robot.png)
 ![IM-robot](doc/img/model_robot.png)
 ![IM-robot](doc/img/rviz_robot_calib.png)   
 ![grasp](doc/img/grasp_QR.gif)
