@@ -1,39 +1,48 @@
 DWAPlannerROS:
-  max_trans_vel: 0.50
-  min_trans_vel: 0.01
-  max_vel_x: 0.50
-  min_vel_x: -0.25
-  max_vel_y: 0.0
-  min_vel_y: 0.0
-  max_rot_vel: 0.30
-  min_rot_vel: -0.30
-  acc_lim_x: 1.25
-  acc_lim_y: 0.0
-  acc_lim_theta: 5
-  acc_lim_trans: 1.25
+# Robot Configuration Parameters - stdr robot
+  max_trans_vel: 0.50 #平移速度最大值绝对值
+  min_trans_vel: 0.01 #平移速度最小值的绝对值
+  max_vel_x: 0.50 #x方向最大速度的绝对值
+  min_vel_x: -0.25 #x方向最小值绝对值,如果为负值表示可以后退.
+  max_vel_y: 0.0 #y方向最大速度的绝对值.
+  min_vel_y: 0.0 #y方向最小速度的绝对值.
+  max_rot_vel: 0.30 #最大旋转速度的绝对值.
+  min_rot_vel: -0.30 #最小旋转速度的绝对值.
+  acc_lim_x: 1.25 #x方向的加速度绝对值
+  acc_lim_y: 0.0 #y方向的加速度绝对值,该值只有全向移动的机器人才需配置
+  acc_lim_theta: 5 #旋转加速度的绝对值.
+  acc_lim_trans: 1.25 #旋转加速度的绝对值.
 
-  prune_plan: false
+# Oscillation Prevention Parameters
+  prune_plan: false #机器人前进是是否清除身后1m外的轨迹.
 
-  xy_goal_tolerance: 0.25
-  yaw_goal_tolerance: 0.1
+# Goal Tolerance Parameters
+  xy_goal_tolerance: 0.25 #到达目标点时,在xy平面内与目标点的距离误差. 
+  yaw_goal_tolerance: 0.1 #达目标点时偏行角允许的误差，单位弧度.
   trans_stopped_vel: 0.1
   rot_stopped_vel: 0.1
-  sim_time: 3.0
-  sim_granularity: 0.1
-  angular_sim_granularity: 0.1
-  path_distance_bias: 34.0
-  goal_distance_bias: 24.0
-  occdist_scale: 0.05
-  twirling_scale: 0.0
-  stop_time_buffer: 0.5
-  oscillation_reset_dist: 0.05
-  oscillation_reset_angle: 0.2
-  forward_point_distance: 0.3
-  scaling_speed: 0.25
-  max_scaling_factor: 0.2
-  vx_samples: 20
-  vy_samples: 0
-  vth_samples: 40
 
+# Forward Simulation Parameters
+  sim_time: 3.0 #向前仿真轨迹的时间.
+  sim_granularity: 0.1 #步长,轨迹上采样点之间的距离,轨迹上点的密集程度.
+  angular_sim_granularity: 0.1
+  vx_samples: 20 #x方向速度空间的采样点数.
+  vy_samples: 0 #y方向速度空间采样点数
+  vth_samples: 40 #旋转方向的速度空间采样点数.
+
+# Trajectory Scoring Parameters
+  path_distance_bias: 34.0 #定义控制器与给定路径接近程度的权重.
+  goal_distance_bias: 24.0 #定义控制器与局部目标点的接近程度的权重.
+  occdist_scale: 0.05 #定义控制器躲避障碍物的程度.
+  twirling_scale: 0.0
+  stop_time_buffer: 0.5 #为防止碰撞,机器人必须提前停止的时间长度.
+  forward_point_distance: 0.3
+  scaling_speed: 0.25 #启动机器人底盘的速度.
+  max_scaling_factor: 0.2 #最大缩放参数.
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05 #机器人运动多远距离才会重置振荡标记.
+  oscillation_reset_angle: 0.2
+ 
   use_dwa: true
   restore_defaults: false
