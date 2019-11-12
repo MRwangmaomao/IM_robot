@@ -2,27 +2,53 @@
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     <param name="base_frame" value="/base_footprint" />
     <param name="odom_frame" value="/odom" />
+
+    <!-- 地图更新的一个间隔，两次scanmatch的间隔，地图更新也受scanmach的影响，如果scanmatch没有成功的话，是不会更新地图的 -->
     <param name="map_update_interval" value="15.0"/>
+
+    <!-- set maxUrange < maximum range of the real sensor <= maxRange -->
     <param name="maxUrange" value="5.0"/>
+    
     <param name="minRange" value="-0.5"/>
     <param name="sigma" value="0.05"/>
     <param name="kernelSize" value="1"/>
+
+    <!-- optimize机器人移动的初始值（距离） -->
     <param name="lstep" value="0.05"/>
+
+    <!-- optimize机器人移动的初始值（角度） -->
     <param name="astep" value="0.05"/>
+
+    <!-- /icp的迭代次数 -->
     <param name="iterations" value="5"/>
     <param name="lsigma" value="0.075"/>
     <param name="ogain" value="3.0"/>
+
+    <!-- 为0,表示所有的激光都处理，尽可能为零，如果计算压力过大，可以改成1 -->
     <param name="lskip" value="0"/>
-    <param name="minimumScore" value="100"/>
+
+    <!-- 很重要，判断scanmatch是否成功的阈值，过高的话会使scanmatch失败，从而影响地图更新速率。 -->
+    <!-- 最小匹配得分，这个参数很重要，它决定了对激光的一个置信度，越高说明对激光匹配算法的要求越高，激光的匹配也越容易失败而转去使用里程计数据，而设的太低又会使地图中出现大量噪声，所以需要权衡调整。 -->
+    <param name="minimumScore" value="100"/> 
+
+    <!-- 以下四个参数是运动模型的噪声参数 -->
     <param name="srr" value="0.01"/>
     <param name="srt" value="0.02"/>
     <param name="str" value="0.01"/>
     <param name="stt" value="0.02"/>
+
+    <!-- 机器人移动linearUpdate距离，进行scanmatch -->
     <param name="linearUpdate" value="0.7"/>
+
+    <!-- 机器人选装angularUpdate角度，进行scanmatch -->
     <param name="angularUpdate" value="0.7"/>
     <param name="temporalUpdate" value="-0.5"/>
     <param name="resampleThreshold" value="0.5"/>
+
+    <!-- gmapping算法中的粒子数，因为gmapping使用的是粒子滤波算法，粒子在不断地迭代更新，所以选取一个合适的粒子数可以让算法在保证比较准确的同时有较高的速度。  -->
     <param name="particles" value="50"/>
+
+    <!-- map初始化的大小 -->
     <param name="xmin" value="-50.0"/>
     <param name="ymin" value="-50.0"/>
     <param name="xmax" value="50.0"/>
