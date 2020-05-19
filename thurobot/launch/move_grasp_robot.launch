@@ -1,0 +1,9 @@
+<launch> 
+    <include file="$(find tagslam)/launch/tagslam_navigation.launch">
+        <arg name="open_rviz" value="0"/>
+    </include>
+    <include file="$(find aubo_i5_moveit_config)/launch/moveit_planning_execution.launch">
+        <arg name="sim" value="false"/>
+        <arg name="robot_ip" value="192.168.13.5"/>
+    </include> 
+</launch>

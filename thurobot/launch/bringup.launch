@@ -22,15 +22,7 @@
         <param name="orientation_stddev" value="0.05" />
         <param name="angular_scale" value="1.0" />
     </node>
-
-
-    <!-- Publish static transform from base_footprint to imu_link -->
-    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_imu_link" args="0 0 0 0 0 0  /base_footprint /imu_link  100"/>
-
-    <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser" args="0.3 0 0.24 3.14 0 0  /base_footprint /laser  100"/>
-    
-    <!-- <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0.2 0 0.1 3.14 0 0  /odom /map  100"/> -->
-
+ 
     <!-- Publish Linorobot odometry -->
     <node pkg="thurobot" name="thu_base_node" type="thu_base_node">
     	<param name="linear_scale" type="double" value="1.0" />

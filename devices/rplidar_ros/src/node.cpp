@@ -283,6 +283,7 @@ int main(int argc, char * argv[]) {
     ros::Time end_scan_time;
     double scan_duration;
     while (ros::ok()) {
+        ROS_INFO("OK");
         rplidar_response_measurement_node_hq_t nodes[360*8];
         size_t   count = _countof(nodes);
 
