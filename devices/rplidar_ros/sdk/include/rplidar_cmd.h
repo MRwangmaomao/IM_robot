@@ -3,7 +3,7 @@
  *
  *  Copyright (c) 2009 - 2014 RoboPeak Team
  *  http://www.robopeak.com
- *  Copyright (c) 2014 - 2018 Shanghai Slamtec Co., Ltd.
+ *  Copyright (c) 2014 - 2019 Shanghai Slamtec Co., Ltd.
  *  http://www.slamtec.com
  *
  */
@@ -52,9 +52,11 @@
 
 #define RPLIDAR_CMD_GET_SAMPLERATE     0x59 //added in fw 1.17
 
+#define RPLIDAR_CMD_HQ_MOTOR_SPEED_CTRL      0xA8
+
 // Commands with payload and have response
 #define RPLIDAR_CMD_EXPRESS_SCAN       0x82 //added in fw 1.17
-
+#define RPLIDAR_CMD_HQ_SCAN                  0x83 //added in fw 1.24
 #define RPLIDAR_CMD_GET_LIDAR_CONF           0x84 //added in fw 1.24
 #define RPLIDAR_CMD_SET_LIDAR_CONF           0x85 //added in fw 1.24
 //add for A2 to set RPLIDAR motor pwm when using accessory board
@@ -77,11 +79,21 @@
 //for ultra express working flag
 #define RPLIDAR_ULTRAEXPRESS_SCAN_FLAG_STD                 0x0001 
 #define RPLIDAR_ULTRAEXPRESS_SCAN_FLAG_HIGH_SENSITIVITY    0x0002
+
+#define RPLIDAR_HQ_SCAN_FLAG_CCW            (0x1<<0)
+#define RPLIDAR_HQ_SCAN_FLAG_RAW_ENCODER    (0x1<<1)
+#define RPLIDAR_HQ_SCAN_FLAG_RAW_DISTANCE   (0x1<<2)
+
 typedef struct _rplidar_payload_express_scan_t {
     _u8   working_mode;
     _u16  working_flags;
     _u16  param;
 } __attribute__((packed)) rplidar_payload_express_scan_t;
+
+typedef struct _rplidar_payload_hq_scan_t {
+    _u8  flag;
+    _u8   reserved[32];
+} __attribute__((packed)) rplidar_payload_hq_scan_t;
 
 typedef struct _rplidar_payload_get_scan_conf_t {
     _u32  type;
@@ -97,6 +109,10 @@ typedef struct _rplidar_payload_acc_board_flag_t {
     _u32 reserved;
 } __attribute__((packed)) rplidar_payload_acc_board_flag_t;
 
+typedef struct _rplidar_payload_hq_spd_ctrl_t {
+    _u16  rpm;
+} __attribute__((packed)) rplidar_payload_hq_spd_ctrl_t;
+
 // Response
 // ------------------------------------------
 #define RPLIDAR_ANS_TYPE_DEVINFO          0x4
@@ -105,6 +121,8 @@ typedef struct _rplidar_payload_acc_board_flag_t {
 #define RPLIDAR_ANS_TYPE_MEASUREMENT                0x81
 // Added in FW ver 1.17
 #define RPLIDAR_ANS_TYPE_MEASUREMENT_CAPSULED       0x82
+#define RPLIDAR_ANS_TYPE_MEASUREMENT_HQ            0x83
+
 
 // Added in FW ver 1.17
 #define RPLIDAR_ANS_TYPE_SAMPLE_RATE      0x15
@@ -113,7 +131,7 @@ typedef struct _rplidar_payload_acc_board_flag_t {
 //added in FW ver 1.24
 #define RPLIDAR_ANS_TYPE_GET_LIDAR_CONF     0x20
 #define RPLIDAR_ANS_TYPE_SET_LIDAR_CONF     0x21
-
+#define RPLIDAR_ANS_TYPE_MEASUREMENT_DENSE_CAPSULED        0x85
 #define RPLIDAR_ANS_TYPE_ACC_BOARD_FLAG   0xFF
 
 #define RPLIDAR_RESP_ACC_BOARD_FLAG_MOTOR_CTRL_SUPPORT_MASK      (0x1)
@@ -128,6 +146,9 @@ typedef struct _rplidar_response_acc_board_flag_t {
 
 #define RPLIDAR_RESP_MEASUREMENT_SYNCBIT        (0x1<<0)
 #define RPLIDAR_RESP_MEASUREMENT_QUALITY_SHIFT  2
+
+#define RPLIDAR_RESP_HQ_FLAG_SYNCBIT               (0x1<<0)
+
 #define RPLIDAR_RESP_MEASUREMENT_CHECKBIT       (0x1<<0)
 #define RPLIDAR_RESP_MEASUREMENT_ANGLE_SHIFT    1
 
@@ -156,6 +177,8 @@ typedef struct _rplidar_response_cabin_nodes_t {
 #define RPLIDAR_RESP_MEASUREMENT_EXP_SYNC_1               0xA
 #define RPLIDAR_RESP_MEASUREMENT_EXP_SYNC_2               0x5
 
+#define RPLIDAR_RESP_MEASUREMENT_HQ_SYNC                  0xA5
+
 #define RPLIDAR_RESP_MEASUREMENT_EXP_SYNCBIT              (0x1<<15)
 
 typedef struct _rplidar_response_capsule_measurement_nodes_t {
@@ -164,6 +187,18 @@ typedef struct _rplidar_response_capsule_measurement_nodes_t {
     _u16                            start_angle_sync_q6;
     rplidar_response_cabin_nodes_t  cabins[16];
 } __attribute__((packed)) rplidar_response_capsule_measurement_nodes_t;
+
+typedef struct _rplidar_response_dense_cabin_nodes_t {
+    _u16   distance; 
+} __attribute__((packed)) rplidar_response_dense_cabin_nodes_t;
+
+typedef struct _rplidar_response_dense_capsule_measurement_nodes_t {
+    _u8                             s_checksum_1; // see [s_checksum_1]
+    _u8                             s_checksum_2; // see [s_checksum_1]
+    _u16                            start_angle_sync_q6;
+    rplidar_response_dense_cabin_nodes_t  cabins[40];
+} __attribute__((packed)) rplidar_response_dense_capsule_measurement_nodes_t;
+
 // ext1 : x2 boost mode
 
 #define RPLIDAR_RESP_MEASUREMENT_EXP_ULTRA_MAJOR_BITS     12
@@ -189,12 +224,24 @@ typedef struct rplidar_response_measurement_node_hq_t {
     _u8    flag;
 } __attribute__((packed)) rplidar_response_measurement_node_hq_t;
 
+typedef struct _rplidar_response_hq_capsule_measurement_nodes_t{
+    _u8 sync_byte;
+    _u64 time_stamp;
+    rplidar_response_measurement_node_hq_t node_hq[16];
+    _u32  crc32;
+}__attribute__((packed)) rplidar_response_hq_capsule_measurement_nodes_t;
+
+
 #   define RPLIDAR_CONF_SCAN_COMMAND_STD            0
 #   define RPLIDAR_CONF_SCAN_COMMAND_EXPRESS        1
 #   define RPLIDAR_CONF_SCAN_COMMAND_HQ             2
 #   define RPLIDAR_CONF_SCAN_COMMAND_BOOST          3
 #   define RPLIDAR_CONF_SCAN_COMMAND_STABILITY      4
 #   define RPLIDAR_CONF_SCAN_COMMAND_SENSITIVITY    5
+
+#define RPLIDAR_CONF_ANGLE_RANGE                    0x00000000
+#define RPLIDAR_CONF_DESIRED_ROT_FREQ               0x00000001
+#define RPLIDAR_CONF_SCAN_COMMAND_BITMAP            0x00000002
 #define RPLIDAR_CONF_MIN_ROT_FREQ                   0x00000004
 #define RPLIDAR_CONF_MAX_ROT_FREQ                   0x00000005
 #define RPLIDAR_CONF_MAX_DISTANCE                   0x00000060

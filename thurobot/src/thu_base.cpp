@@ -60,7 +60,7 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
 
     geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_footprint";
+    odom_trans.child_frame_id = "robot_base";
     //robot's position in x,y, and z
     odom_trans.transform.translation.x = x_pos_;
     odom_trans.transform.translation.y = y_pos_;
@@ -74,7 +74,7 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
     odom.header.frame_id = "odom";
-    odom.child_frame_id = "base_footprint";
+    odom.child_frame_id = "robot_base";
 
     //robot's position in x,y, and z
     odom.pose.pose.position.x = x_pos_;
@@ -129,7 +129,7 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
 
 //     geometry_msgs::TransformStamped odom_trans;
 //     odom_trans.header.frame_id = "odom";
-//     odom_trans.child_frame_id = "base_footprint";
+//     odom_trans.child_frame_id = "robot_base";
 //     //robot's position in x,y, and z
 //     odom_trans.transform.translation.x = x_pos_;
 //     odom_trans.transform.translation.y = y_pos_;
@@ -143,7 +143,7 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
 //     nav_msgs::Odometry odom;
 //     odom.header.stamp = current_time;
 //     odom.header.frame_id = "odom";
-//     odom.child_frame_id = "base_footprint";
+//     odom.child_frame_id = "robot_base";
 
 //     //robot's position in x,y, and z
 //     odom.pose.pose.position.x = x_pos_;
