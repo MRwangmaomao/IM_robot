@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_plugins
   gazebo_ros
   gazebo_ros_control
+  # aubo_arm_usr
 )
 catkin_package(
   INCLUDE_DIRS include

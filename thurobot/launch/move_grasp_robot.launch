@@ -23,5 +23,16 @@
     <include file="$(find aubo_arm_usr)/launch/grasp_cup_srv.launch"> 
         <!-- <arg name="output" value="log"/> -->
     </include>
-  
+    
+    
+    <node pkg="slam_semantic_nav_ros" type="tts_subscribe_node" name="tts_subscribe_node" args="$(find slam_semantic_nav_ros)/config/setting_file.yaml"
+        clear_params="true" >
+    </node>
+    
+    <include file="$(find rplidar_ros)/launch/rplidar_a3.launch"> </include>
+ 
+    <!-- <node pkg="slam_semantic_nav_ros" type="gesture_pub_node"  name="gesture_pub_node"  clear_params="true" output="screen" 
+        args="$(find slam_semantic_nav_ros)/config/setting_file.yaml ">
+    </node> -->
+
 </launch>

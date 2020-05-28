@@ -46,8 +46,8 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
     last_vel_time_ = current_time;
 
     double delta_heading = angular_velocity_z_ * vel_dt_ ; //radians
-    double delta_x = (linear_velocity_x_ * cos(heading_) - linear_velocity_y_ * sin(heading_)) * vel_dt_ ; //m
-    double delta_y = (linear_velocity_x_ * sin(heading_) + linear_velocity_y_ * cos(heading_)) * vel_dt_ ; //m
+    double delta_y = (linear_velocity_x_ * cos(heading_) - linear_velocity_y_ * sin(heading_)) * vel_dt_ ; //m
+    double delta_x = (linear_velocity_x_ * sin(heading_) + linear_velocity_y_ * cos(heading_)) * vel_dt_ ; //m
 
     //calculate current position of the robot
     x_pos_ += delta_x;
@@ -59,8 +59,8 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(heading_);
 
     geometry_msgs::TransformStamped odom_trans;
-    odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "robot_base";
+    odom_trans.header.frame_id = "robot_base";
+    odom_trans.child_frame_id = "odom";
     //robot's position in x,y, and z
     odom_trans.transform.translation.x = x_pos_;
     odom_trans.transform.translation.y = y_pos_;
@@ -69,12 +69,12 @@ void RikiBase::velCallback(const riki_msgs::Velocities& vel)
     odom_trans.transform.rotation = odom_quat;
     odom_trans.header.stamp = current_time;
     //publish robot's tf using odom_trans object
-    // odom_broadcaster_.sendTransform(odom_trans);
+    odom_broadcaster_.sendTransform(odom_trans);
 
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time;
-    odom.header.frame_id = "odom";
-    odom.child_frame_id = "robot_base";
+    odom.header.frame_id = "robot_base";
+    odom.child_frame_id = "odom";
 
     //robot's position in x,y, and z
     odom.pose.pose.position.x = x_pos_;

@@ -8,46 +8,58 @@ This robot is combine car with arm.
 
     版 本 : Ver1.0
 
-    时 间 : 2019.06.05
+    时 间 : 2020.05.20
 
+    如欲合作，可wechat联系：13713917385
 ---------------------------------
 
+实物图
+
 ![IM-robot](doc/img/IM-Robot.png)
+![discription1](doc/img/robot_discription1.jpeg)
+![discription2](doc/img/robot_discription2.jpeg)
+
+机械图
+
 ![IM-robot](doc/img/model_robot.png)
-![IM-robot](doc/img/rviz_robot_calib.png)   
+
+urdf模型和手眼标定
+
+![IM-robot](doc/img/rviz_robot_calib.png)
+
+SLAM建图
+
 ![slam](doc/img/slam.gif)
+
+机械臂抓取
+
 ![grasp](doc/img/grasp_QR.gif)
 
-## 1 car Simulation
+rgbd相机，单线雷达和tagslam结合定位导航
 
-### 1.1 navigation
-navigation and avoid obstacles by ros move base
-```
-roslaunch thurobot thurobot_laser_nav_gazebo.launch 
-roslaunch thurobot nav_cloister_demo_sim.launch
-roslaunch thurobot thurobot_teleop.launch
-```
+![rgbd_grasp1](doc/img/rgbd_grasp1.png)
+![rgbd_grasp2](doc/img/rgbd_grasp2.png)
+![rgbd_grasp3](doc/img/rgbd_lidar_grasp.png)
+
+## 1 How to work
  
-### 1.2 exploring slam
 ```
-roslaunch thurobot thurobot_laser_nav_gazebo.launch
-roslaunch thurobot exploring_slam_demo.launch
-rosrun thurobot exploring_slam_sim.py 
+roslaunch thurobot move_grasp_robot.launch
 ```
-
-## 2 Testing on actrual robot
-
-
-```
-roslaunch thurobot bringup.launch 
-```
-
-You need to change linear_scale parameter in bringup.launch file.(I set as 1.0)
+  
 
 
-## 3 aubo arm control 
+## 2 All package about robot 
 
-包含模块：
+定位导航部分包含模块：
+
+[tagslam_robot](https://github.com/MRwangmaomao/tagslam_robot)
+
+[semantic_slam_nav_ros](https://github.com/MRwangmaomao/semantic_slam_nav_ros)
+
+[MYNT-EYE-D-SDK](https://github.com/slightech/MYNT-EYE-D-SDK)
+
+机械臂视部分包含模块：
 
 [aubo_arm_usr](https://github.com/MRwangmaomao/aubo_arm_usr)
 
@@ -55,50 +67,12 @@ You need to change linear_scale parameter in bringup.launch file.(I set as 1.0)
 
 [dh_hand_driver](https://github.com/MRwangmaomao/dh_hand_driver)
 
-[dh_hand_driver](https://github.com/MRwangmaomao/dh_hand_driver)
-
 [apriltag_ros](https://github.com/MRwangmaomao/apriltag_ros)
- 
-```
-roslaunch auboi5_moveit_config demo.launch sim:=true
-```
+  
+[easy_handeye](https://github.com/MRwangmaomao/easy_handeye)
 
-Then select "Interact" and move the end-effector to a new goal.
+[easy_handeye](https://github.com/MRwangmaomao/find_cup_ros)
 
-In "Motion Planning" -> "Plan and Execute" to send trajectory to the sim robot
+[visp_hand2eye_calibration](https://github.com/arushk1/visp_hand2eye_calibration)
 
-Exit RViz and Ctrl-C the demo.launch window
-
- 
- 
-## 6 remote and establish map
-包含ros包：
-
-rplidar_a3
-
-[cartographer_ros](https://github.com/MRwangmaomao/cartographer_ros)
-
-thurobot 
-
-teleop_twist_keyboard
-
-##### cartographer建立地图
-```
-roslaunch thurobot cartographer_slam.launch
-```
-
-##### gmapping建立地图
-```
-roslaunch thurobot lidar_slam.launch
-```
-
-## 7 navigation by map
-```
-roslaunch thurobot navigate_multi.launch
-```
-
-## 8 automatic map
-```
-roslaunch thurobot auto_slam.launch
-```
-
+[iai_kinect2](https://github.com/MRwangmaomao/iai_kinect2)
