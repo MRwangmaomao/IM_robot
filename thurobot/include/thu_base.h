@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 #include <riki_msgs/Velocities.h>
 #include <tf/transform_broadcaster.h>
-
+#include <iostream>
 class RikiBase
 {
 public:

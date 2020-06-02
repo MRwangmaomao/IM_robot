@@ -96,18 +96,18 @@ if __name__ == "__main__":
         rospy.init_node('move_grasp_robot', anonymous=True)
         x = [-0.080742, -0.150223, -0.015729, 0.3, 0.1]
         
-        voice("我准备出发了")
+        voice("出发了")
         move_to_end(x)
-        voice("您好，请问有什么需要")
+        voice("我到了")
         
-        if(grasp_cube(1)):
-            print("grasp a cube end!")
+        # if(grasp_cube(1)):
+        #     print("grasp a cube end!")
         
-        voice("握个手") 
-        shake_hand(4)
-        voice("再见")
-        shake_head(4)
+        # voice("握个手")  
+        # voice("再见")
+        shake_head(2)
         grasp_cup(1)
+        shake_hand(4)
         move_motion() 
     except KeyboardInterrupt:
         print("shutting down")
