@@ -1,42 +1,58 @@
 <launch> 
+    <!-- tagslam定位导航算法 -->
     <include file="$(find tagslam)/launch/tagslam_navigation.launch">
         <arg name="open_rviz" value="0"/>
     </include>
 
+    <!-- auboi5机器人启动和运动规划算法 -->
     <include file="$(find aubo_i5_moveit_config)/launch/moveit_planning_execution.launch">
         <arg name="sim" value="false"/>
         <arg name="robot_ip" value="192.168.13.5"/>
     </include> 
     
+    <!-- 电动夹爪 -->
     <include file="$(find dh_hand_driver)/launch/dh_hand_controller.launch" />
 
+    <!-- kinectv2相机驱动 -->
     <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch"> 
         <!-- <arg name="output" value="log"/> -->
     </include> 
     
+    <!-- 机械臂固定动作程序 -->
     <node pkg="aubo_arm_usr" type="aubo_motion" name="aubo_motion" />
 
+    <!-- 机械手臂抓取木块服务程序 -->
     <include file="$(find aubo_arm_usr)/launch/grasp_cube_srv.launch"> 
         <!-- <arg name="output" value="log"/> -->
     </include>
 
+    <!-- 机械手臂抓取杯子服务程序 -->
     <include file="$(find aubo_arm_usr)/launch/grasp_cup_srv.launch"> 
         <!-- <arg name="output" value="log"/> -->
     </include>
     
-    
+    <!-- GPD根据点云生成夹爪位姿服务程序 -->
+    <include file="$(find gpd_ros)/launch/auboi5_gpd_ros.launch"> 
+         
+    </include> 
+
+    <!-- 机器人语言合成程序 -->
     <node pkg="slam_semantic_nav_ros" type="tts_subscribe_node" name="tts_subscribe_node" args="$(find slam_semantic_nav_ros)/config/setting_file.yaml"
         clear_params="true" >
     </node>
     
+    <!-- 激光雷达驱动程序 -->
     <include file="$(find rplidar_ros)/launch/rplidar_a3.launch"> </include>
- 
+    
+    <!-- 手势识别程序 -->
     <node pkg="slam_semantic_nav_ros" type="gesture_pub_node"  name="gesture_pub_node"  clear_params="true" output="screen" 
         args="$(find slam_semantic_nav_ros)/config/setting_file.yaml ">
     </node>
-
-    <node pkg="semantic_ros" type="semantic_ros_node" name="semantic_ros_node"   
-        args="$(find semantic_ros)/config/semantic_param.yaml">
-    </node>
+ 
+    <!-- 机器人语义识别和3D分割测量 -->
+    <!-- <node pkg="semantic_ros" type="semantic_ros_node" name="semantic_ros_node"   
+        args="$(find semantic_ros)/config/semantic_param.yaml" respawn ="true" >
+    </node> -->
     
+
 </launch>
